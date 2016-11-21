@@ -34,6 +34,6 @@ class NeuralNetwork(model.Model):
                 np.random.uniform(
                     low=-self.epsilon,
                     high=self.epsilon,
-                    size=self.hlayer_node_count
+                    size=(self.hlayer_node_count, self.input_count + 1)
                 )
             )
