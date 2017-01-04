@@ -11,14 +11,27 @@ class NeuralNetwork(model.Model):
 
     def __init__(self, X, y, label_count, hlayer_count, hlayer_node_count):
         self.X = X
-        self.y = y
+        self.y = self._to_out_vec(y, label_count)
         self.m, self.input_count = X.shape
+        self.a = []
+        self.delta = [None] * (hlayer_count + 1)
+        self.error = [0] * (hlayer_count + 1)
         self.label_count = label_count
         self.hlayer_count = hlayer_count
         self.hlayer_node_count = hlayer_node_count
 
         self._init_epsilon()
         self._init_weights()
+
+    def _to_out_vec(self, y, labels):
+        output_vector = []
+
+        for row in y:
+            new_row = np.zeros(labels)
+            new_row[row] = 1
+            output_vector.append(new_row)
+
+        return output_vector
 
     def _init_epsilon(self):
         """Initialise the value of epsilon.
@@ -37,12 +50,20 @@ class NeuralNetwork(model.Model):
         """
         self.layer_weights = []
 
-        for l in range(self.hlayer_count):
+        self.layer_weights.append(
+            np.random.uniform(
+                low=-self.epsilon,
+                high=self.epsilon,
+                size=(self.hlayer_node_count, self.input_count + 1)
+            )
+        )
+
+        for l in range(self.hlayer_count - 1):
             self.layer_weights.append(
                 np.random.uniform(
                     low=-self.epsilon,
                     high=self.epsilon,
-                    size=(self.hlayer_node_count, self.input_count + 1)
+                    size=(self.hlayer_node_count, self.hlayer_node_count + 1)
                 )
             )
 
@@ -50,11 +71,11 @@ class NeuralNetwork(model.Model):
             np.random.uniform(
                 low=-self.epsilon,
                 high=self.epsilon,
-                size=(1, self.hlayer_node_count + 1)
+                size=(self.label_count, self.hlayer_node_count + 1)
             )
         )
 
-    def _forward_feed(self, a, i=1):
+    def _forward_feed(self, x, i=0):
         """Propagate forward through the Network.
 
         Propagates the provided activation of layer i to the next.
@@ -62,16 +83,34 @@ class NeuralNetwork(model.Model):
         Parameters
         ----------
         a : numpy.ndarray
-            The activation for layer i-1.
+            The activations for layer i - 1.
         i : int
-            The current layer.
+            The current layer number.
         """
-        if i == self.hlayer_count + 1:  # + 1 assures propagiton to output layer.
-            return a
+        a_bias = np.insert(x, 0, 1, axis=1)  # Add bias units.
+        z = np.dot(a_bias, self.layer_weights[i].T)   # Multiply activations by weights.
 
-        a = np.insert(a, 0, 1, axis=1)  # Add bias units.
-        z = np.matmul(a, self.layer_weights[i].T)   # Multiply activations by weights.
-        a_new = af.sigmoid(z)   # Find next layers activation.
-        h_theta = self._forward_feed(a_new, i + 1)  # Recursively propagate through all layers.
+        self.a.append(af.sigmoid(z))   # Caluculate layers activations.
+
+        if i == self.hlayer_count:
+            return self.a[i]
+        else:
+            h_theta = self._forward_feed(self.a[i], i + 1)  # Recursively propagate through all layers.
 
         return h_theta
+
+    def _back_propagate(self):
+        """Backpropagate through the Network.
+
+        Propagates the weight erros back through the network.
+        """
+        for t in range(self.m):
+            self.delta[self.hlayer_count] = self.a[self.hlayer_count][t, :] - self.y[t]
+            self.error[self.hlayer_count] = np.dot(self.delta[self.hlayer_count], self.a[self.hlayer_count].T)
+
+            for l in reversed(range(self.hlayer_count)):
+                self.delta[l] = np.dot(self.layer_weights[l + 1].T, self.delta[l + 1]) * np.insert(self.a[l], 0, 1, axis=1)[t, :]
+                self.delta[l] = self.delta[l][1:]
+                self.error[l] += np.dot(self.delta[l], self.a[l].T)
+
+        return self.error
