@@ -24,6 +24,19 @@ class NeuralNetwork(model.Model):
         self._init_weights()
 
     def _to_out_vec(self, y, labels):
+        """Turn numerical classes to one vs. all vectors.
+
+        Convert an array of numerical classes to an array of
+        arrays, where each array is a one vs. all representation
+        of the class. ie. 5 = [0, 0, 0, 0, 1, 0].
+
+        Parameters
+        ~~~~~~~~~~
+        y : np.ndarray
+            An array of numerical class labels.
+        labels : int
+            The number of separate classes.
+        """
         output_vector = []
 
         for row in y:
@@ -102,7 +115,7 @@ class NeuralNetwork(model.Model):
     def _back_propagate(self):
         """Backpropagate through the Network.
 
-        Propagates the weight erros back through the network.
+        Propagates the weight errors back through the network.
         """
         for t in range(self.m):
             self.delta[self.hlayer_count] = self.a[self.hlayer_count][t, :] - self.y[t]
