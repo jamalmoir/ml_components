@@ -1,10 +1,9 @@
-import model
 import numpy as np
 import pandas as pd
 import activation_functions as af
 
 
-class NeuralNetwork(model.Model):
+class NeuralNetwork(object):
     """Implements a neural network.
 
     A Forward feeding, backpropagation Artificial Neural Network.
