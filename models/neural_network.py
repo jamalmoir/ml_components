@@ -108,7 +108,9 @@ class NeuralNetwork(object):
         """Calculate the cost of the Network.
 
         Calculate the cost of the Network with current weights."""
-        J = (-1 / self.m) * np.sum(np.log(self.a3.T) * self.y + np.log(1 - self.a3).T * (1 - self.y))
+        a3 = np.exp(self.a3) / self.a3.sum() if self.activation_func == af.tanh else self.a3
+
+        J = (-1 / self.m) * np.sum(np.log(a3.T) * self.y + np.log(1 - a3).T * (1 - self.y))
         regulator = (self.lam / (2 * self.m)) * np.sum(np.square(self.theta1[:, 1:])) + np.sum(
             np.square(self.theta2[:, 1:]))
         J += regulator
