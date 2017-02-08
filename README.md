@@ -2,16 +2,16 @@
 
 The aim of this project is to develop a library of reusable Machine Learning components.
 
-Implemented:
+**IMPLEMENTED**
 - Forward Feeding Backpropagation Artificial Neural Network
 
-TODO:
+**TODO**
 - Decision Tree trained via the ID3 algorithm
 - K-Nearest-Neighbours 
 - Logistic Regression
 - Linear Regression
 
-ROADMAP:
+**ROADMAP**
 - ~~Develop forward feedining backpropagation Artificial Neural Network~~
 - ~~Change Neural Network to use an adaptive learning rate~~
 - ~~Add hyperbolic tangent as a activation function~~
