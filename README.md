@@ -1,12 +1,22 @@
 # Reusable Maching Learning Components #
 
-The aim of this project is to develop reusable Machine Learning components in the form of a library and then to create an easy-to-use graphical user interface on top of the library.
+The aim of this project is to develop a library of reusable Machine Learning components.
 
-The following will be developed:
-- Forward feeding back propagation artificial neural network
-- Decision tree trained via the ID3 algorithm
+Implemented:
+- Forward Feeding Backpropagation Artificial Neural Network
 
-Time permitting the following will also be developed:
-- Logistic regression
-- Linear regression
-- K-nearest neighbours
+TODO:
+- Decision Tree trained via the ID3 algorithm
+- K-Nearest-Neighbours 
+- Logistic Regression
+- Linear Regression
+
+ROADMAP:
+- ~~Develop forward feedining backpropagation Artificial Neural Network~~
+- ~~Change Neural Network to use an adaptive learning rate~~
+- ~~Add hyperbolic tangent as a activation function~~
+- Develop Decision Tree trained with the ID3 algorithm
+- Add support for continuous data to the Decision Tree
+- Develop K-Nearest-Neighbours algorithm
+- Develop Logicsitc Regression algorithm
+- Develop Linear Regression algorithm
