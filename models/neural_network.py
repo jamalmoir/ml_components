@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-import activation_functions as af
+import models.activation_functions as af
 
 
 class NeuralNetwork(object):
