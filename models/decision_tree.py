@@ -136,7 +136,9 @@ class Node(object):
             self.node_type = 'leaf'
             self.output = model[1]
         else:
-            
+            self.node_type = 'attribute'
+            self.attribute = model[0]
 
-
-
+            for node_model in model[1:]:
+                self.child_nodes.append(Node('attribute'))
+                self.child_nodes[-1].build_from_model(node_model)
