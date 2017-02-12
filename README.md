@@ -1,6 +1,8 @@
 # Reusable Maching Learning Components #
 
-The aim of this project is to develop a library of reusable Machine Learning components.
+A library of Machine Learning models and algorithms
+
+This library goes alongside my Machine Learning demonstration graphical application located at https://github.com/jamalmoir/ml_demo
 
 **IMPLEMENTED**
 - Forward Feeding Backpropagation Artificial Neural Network
