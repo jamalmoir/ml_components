@@ -12,6 +12,7 @@ This library goes alongside my Machine Learning demonstration graphical applicat
 - K-Nearest-Neighbours 
 - Logistic Regression
 - Linear Regression
+- ???
 
 **ROADMAP**
 - ~~Develop forward feedining backpropagation Artificial Neural Network~~
