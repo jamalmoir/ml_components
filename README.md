@@ -1,6 +1,6 @@
 # Reusable Maching Learning Components #
 
-A library of Machine Learning models and algorithms
+A library of Machine Learning models and algorithms written in Python.
 
 This library goes alongside my Machine Learning demonstration graphical application located at https://github.com/jamalmoir/ml_demo
 
