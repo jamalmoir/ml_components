@@ -7,7 +7,7 @@ setup(
     author_email='jamal@jamalmoir.com',
     packages=['ml_components', 'mlcomponents.models'],
     license='LICENSE.txt',
-    description='Useful towel-related stuff.',
+    description='A Library of Maching Learning Models and Algorithms.',
     long_description=open('README.txt').read(),
     install_requires=[
         "numpy >= 1.12.0",
