@@ -8,7 +8,7 @@ setup(
     packages=['ml_components', 'mlcomponents.models'],
     license='LICENSE.txt',
     description='A Library of Maching Learning Models and Algorithms.',
-    long_description=open('README.txt').read(),
+    long_description=open('README.md').read(),
     install_requires=[
         "numpy >= 1.12.0",
         "pandas == 0.19.2",
