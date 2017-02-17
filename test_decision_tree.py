@@ -1,6 +1,6 @@
 import numpy as np
 
-from ml_components.models import DecisionTree
+from ml_components.models import decision_tree
 
 # ---Test Data--- #
 data = np.array([[2, 2, 2, 0, 0],
@@ -25,13 +25,13 @@ data_test = np.array([[2, 2, 2, 0],
                       [0, 0, 0, 0]])
 
 # ---Create Decision Tree--- #
-dt = DecisionTree()
+dt = decision_tree.DecisionTree()
 
 # ---Train Decision Tree--- #
 model = dt.train(data)
 
 # ---Create Decision Tree From Previously Trained Model--- #
-dt2 = DecisionTree(model)
+dt2 = decision_tree.DecisionTree(model)
 
 # ---Predict Classes of Test Data---#
 prediction = dt2.predict(data_test)

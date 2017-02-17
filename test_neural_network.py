@@ -2,13 +2,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn import datasets
 
-from ml_components import models as neural_network
+from ml_components.models import neural_network
 
 # ---Load Data--- #
 
-# iris = datasets.load_iris()  # 3 classes
-# X = iris.data
-# y = iris.target
+#iris = datasets.load_iris()  # 3 classes
+#X = iris.data
+#y = iris.target
 
 breast = datasets.load_breast_cancer()  # 2 classes
 X = breast.data
