@@ -60,6 +60,9 @@ class NeuralNetwork(object):
             self.theta1 = model['theta1']
             self.theta2 = model['theta2']
             self.activation_func = model['activation_func']
+            self.input_layer_size = model['input_layer_size']
+            self.hidden_layer_size = model['hidden_layer_size']
+            self.label_count = model['label_count']
 
     def _init_epsilon(self):
         """Initialise the value of epsilon.
@@ -189,7 +192,9 @@ class NeuralNetwork(object):
             if print_cost:
                 print(self.costs[i])
 
-        model = {'theta1': self.theta1, 'theta2': self.theta2, 'activation_func': self.activation_func}
+        model = {'theta1': self.theta1, 'theta2': self.theta2, 'activation_func': self.activation_func,
+                 'input_layer_size': self.input_layer_size, 'hidden_layer_size': self.hidden_layer_size,
+                 'label_count': self.label_count}
 
         return self.costs[-1], self.costs, model
 
