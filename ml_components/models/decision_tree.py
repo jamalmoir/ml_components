@@ -9,18 +9,31 @@ class DecisionTree(object):
 
     Implements a decision tree utilising the ID3 algorithm for training.
     """
+
     def __init__(self, model=None):
         if model is None:
             self.start_node = None
         else:
+            self.model = model
             self.start_node = Node('attribute')
-            self.start_node.build_from_model(model)
+            self.start_node.build_from_model(model['structure'])
+            self.depth = model['depth']
+            self.max_breadth = model['max_breadth']
 
     def train(self, data):
         self.start_node = Node('attribute')
         self.start_node.split(data)
 
-        return self.start_node.get_model()
+        get_depth = lambda alist: isinstance(alist, list) and max(map(get_depth, alist)) + 1
+
+        structure = self.start_node.get_model()
+        class_count = data.shape[1] - 1
+        depth = get_depth(structure)
+        max_breadth = (depth - 1) ** class_count
+
+        self.model = {'depth': depth, 'max_breadth': max_breadth, 'structure': structure}
+
+        return self.model
 
     def predict(self, data):
         prediction = np.apply_along_axis(self.start_node.predict, axis=1, arr=data)
@@ -30,6 +43,7 @@ class DecisionTree(object):
 
 class Node(object):
     """Implements a node in a decision tree."""
+
     def __init__(self, node_type):
         self.node_type = node_type
         self.attribute = None
@@ -56,7 +70,8 @@ class Node(object):
             new_sets.append(new_data)
 
         entropy_current = self._get_entropy(data)
-        entropy_new = sum([(s.shape[0] / data.shape[0]) * self._get_entropy(s) for s in new_sets])  # Get the sum of the entropy of each data split.
+        entropy_new = sum([(s.shape[0] / data.shape[0]) * self._get_entropy(s) for s in
+                           new_sets])  # Get the sum of the entropy of each data split.
 
         return entropy_current - entropy_new
 
@@ -103,7 +118,8 @@ class Node(object):
             try:
                 return self.child_nodes[attribute_value].predict(data)
             except IndexError:
-                print("Unexpected value ({}) given for attribute {}, terminating...".format(attribute_value, self.attribute))
+                print("Unexpected value ({}) given for attribute {}, terminating...".format(attribute_value,
+                                                                                            self.attribute))
                 exit()
 
     def get_model(self):

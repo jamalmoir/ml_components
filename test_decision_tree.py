@@ -39,4 +39,6 @@ prediction = dt2.predict(data_test)
 # ---Print model and prediction results--- #
 print(model)
 print(prediction)
+print(dt2.max_breadth)
+print(dt2.depth)
 
