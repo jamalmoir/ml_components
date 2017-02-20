@@ -102,7 +102,7 @@ class NeuralNetwork(object):
 
         Calculate the cost of the Network with current weights."""
 
-        # Normalise a3 with softmax if using hyperbolic tangent activation function.:w
+        # Normalise a3 with softmax if using hyperbolic tangent activation function.
         a3 = np.exp(self.a3) / self.a3.sum() if self.activation_func == af.tanh else self.a3
 
         J = (-1 / self.m) * np.sum(np.log(a3.T) * y + np.log(1 - a3).T * (1 - y))
