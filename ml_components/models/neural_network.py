@@ -228,6 +228,7 @@ class NeuralNetwork(object):
         prediction = np.argmax(z3, axis=0)
 
         if use_label_map:
-            prediction = self.label_map[prediction]
+            mapped = [self.label_map[pred] for pred in prediction]
+            prediction = mapped
       
         return prediction
