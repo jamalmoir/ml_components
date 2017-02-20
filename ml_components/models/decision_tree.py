@@ -2,12 +2,12 @@ import operator
 
 import numpy as np
 
+
 class DecisionTree(object):
     """Implements a decision tree.
 
     Implements a decision tree utilising the ID3 algorithm for training.
     """
-
     def __init__(self, model=None):
         if model is None:
             self.start_node = None
@@ -29,7 +29,6 @@ class DecisionTree(object):
 
 class Node(object):
     """Implements a node in a decision tree."""
-
     def __init__(self, node_type):
         self.node_type = node_type
         self.attribute = None
@@ -38,16 +37,6 @@ class Node(object):
 
     def _get_entropy(self, data):
         """Get the entropy of an attribute in the node."""
-        '''entropy = 0
-        total = data.shape[0]
-        class_counts = np.bincount(data[:, -1])
-
-        for count in class_counts:
-            pv = count / total  # The probability of the current class.
-            #class_entropy = 0 if pv == 0 else pv * np.log2(pv)
-            #entropy -= class_entropy
-            entropy = pv * np.log2(pv)'''
-
         class_counts = np.bincount(data[:, -1])
         pv = class_counts[np.nonzero(class_counts)] / len(data[:, -1])
         entropy = np.sum(-pv * np.log2(pv))
@@ -67,7 +56,6 @@ class Node(object):
 
         entropy_current = self._get_entropy(data)
         entropy_new = sum([(s.shape[0] / data.shape[0]) * self._get_entropy(s) for s in new_sets])  # Get the sum of the entropy of each data split.
-
 
         return entropy_current - entropy_new
 
@@ -90,7 +78,6 @@ class Node(object):
         return np.all(data[:, -1] == comparison_class)
 
     def split(self, data, i=0):
-        #print("NEW SPLIT with data:\n {}".format(data))
         self.attribute = self._get_best_attribute(data)
         values = list(set(data[:, self.attribute]))
 
@@ -101,9 +88,7 @@ class Node(object):
             if self._get_entropy(new_data) == 0:
                 new_node = Node('leaf')
                 new_node.output = new_data[0][-1]
-                #print("LEAF: {}".format(new_data))
             else:
-                #print("Creating new split at level {} on attribute {}".format(i, self.attribute))
                 new_node = Node('attribute')
                 new_node.split(new_data, i=i + 1)
 
