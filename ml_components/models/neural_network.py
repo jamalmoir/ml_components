@@ -11,15 +11,13 @@ class NeuralNetwork(object):
     A Forward feeding, backpropagation Artificial Neural Network.
     """
 
-    def __init__(self, model=None, hidden_layer_size=None,
-                 activation_func=None):
+    def __init__(self, model=None, hidden_layer_size=None, activation_func=None):
         """Initiate Neural Network.
 
         Initiates a Neural Network with the provided parameters.
 
         Parameters
         ~~~~~~~~~~
-
         hlayer_node_count : int
             The number of nodes in each hidden layer.
         activation_func : str
@@ -176,8 +174,6 @@ class NeuralNetwork(object):
             A matrix of training data.
         y : numpy.ndarray
             A vector of expected outputs.
-        classes : int
-            The number of classes.
         alpha : float
             The learning rate.
         max_epochs : int
@@ -233,5 +229,5 @@ class NeuralNetwork(object):
 
         if use_label_map:
             prediction = self.label_map[prediction]
-
+      
         return prediction

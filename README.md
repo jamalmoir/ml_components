@@ -1,14 +1,27 @@
 # Reusable Maching Learning Components #
 
-This is a University project titles "Reusable Machine Learning Components". 
+A library of Machine Learning models and algorithms written in Python.
 
-The aim of this project is to develop reusable machine learning components in the form of a library and then to create an easy-to-use graphical user interface on top of the library.
+This library goes alongside my Machine Learning demonstration graphical application located at https://github.com/jamalmoir/ml_demo
 
-The following will be developed:
-- Forward feeding back propagation artificial neural network
-- Decision tree trained via the ID3 algorithm
+**IMPLEMENTED**
+- Forward Feeding Backpropagation Artificial Neural Network
+- Decision Tree trained via the ID3 algorithm
 
-Time permitting the following will also be developed:
-- Logistic regression
-- Linear regression
-- K-nearest neighbours
+**TODO**
+- K-Nearest-Neighbours 
+- Logistic Regression
+- Linear Regression
+- ???
+
+**ROADMAP**
+- ~~Develop forward feedining backpropagation Artificial Neural Network~~
+- ~~Change Neural Network to use an adaptive learning rate~~
+- ~~Add support for saving Neural Networks to and loading them from pre-trained models~~
+- ~~Add hyperbolic tangent as a activation function~~
+- ~~Develop Decision Tree trained with the ID3 algorithm~~
+- ~~Add support for saving Decision Trees to and loading them from pre-trained models~~
+- Add support for continuous data to the Decision Tree
+- Develop K-Nearest-Neighbours algorithm
+- Develop Logicsitc Regression algorithm
+- Develop Linear Regression algorithm

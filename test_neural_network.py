@@ -6,9 +6,9 @@ import ml_components.models.neural_network as neural_network
 
 # ---Load Data--- #
 
-# iris = datasets.load_iris()  # 3 classes
-# X = iris.data
-# y = iris.target
+#iris = datasets.load_iris()  # 3 classes
+#X = iris.data
+#y = iris.target
 
 breast = datasets.load_breast_cancer()  # 2 classes
 X = breast.data
