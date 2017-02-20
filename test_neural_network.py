@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn import datasets
 
-from ml_components.models import neural_network
+import ml_components.models.neural_network as neural_network
 
 # ---Load Data--- #
 
@@ -17,17 +17,16 @@ y = breast.target
 # ---Split Into Training and Testing Data--- #
 np.random.seed(0)
 indices = np.random.permutation(len(X))
-train_size = np.round(X.shape[0] / 100 * 15)
+train_size = int(np.round(X.shape[0] / 100 * 15))
 X_train = X[indices[:-train_size]]
 y_train = y[indices[:-train_size]]
 X_test = X[indices[-train_size:]]
 y_test = y[indices[-train_size:]]
 
 # ---Create Neural Network--- #
-nn = neural_network.NeuralNetwork(X=X_train, y=y_train, classes=2, hidden_layer_size=400, lam=0.01,
-                                  activation_func='tanh')
+nn = neural_network.NeuralNetwork(hidden_layer_size=400, activation_func='tanh')
 # ---Train Neural Network--- #
-cost, costs, model = nn.train(alpha=0.01, max_epochs=1000, print_cost=True)
+cost, costs, model = nn.train(X=X_train, y=y_train, alpha=0.01, max_epochs=1000, lam=0.01, print_cost=True)
 
 # ---Create Neural Network From Previously Trained Model--- #
 nn2 = neural_network.NeuralNetwork(model=model)
