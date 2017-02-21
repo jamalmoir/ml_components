@@ -28,10 +28,10 @@ class DecisionTree(object):
 
         structure = self.start_node.get_model()
         class_count = X.shape[1]
-        depth = get_depth(structure)
-        max_breadth = (depth - 1) ** class_count
+        self.depth = get_depth(structure)
+        self.max_breadth = (self.depth - 1) ** class_count
 
-        self.model = {'depth': depth, 'max_breadth': max_breadth, 'structure': structure}
+        self.model = {'depth': self.depth, 'max_breadth': self.max_breadth, 'structure': structure}
 
         return self.model
 
