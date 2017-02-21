@@ -3,20 +3,22 @@ import numpy as np
 from ml_components.models import decision_tree
 
 # ---Test Data--- #
-data = np.array([[2, 2, 2, 0, 0],
-                 [2, 2, 2, 1, 0],
-                 [1, 2, 2, 0, 1],
-                 [0, 1, 2, 0, 1],
-                 [0, 0, 2, 0, 1],
-                 [0, 0, 2, 1, 0],
-                 [1, 0, 2, 1, 1],
-                 [2, 1, 2, 0, 0],
-                 [2, 0, 2, 0, 1],
-                 [0, 1, 2, 0, 1],
-                 [2, 1, 2, 1, 1],
-                 [1, 1, 2, 1, 1],
-                 [1, 2, 2, 0, 1],
-                 [0, 1, 2, 1, 0]])
+X = np.array([[2, 2, 2, 0],
+                 [2, 2, 2, 1],
+                 [1, 2, 2, 0],
+                 [0, 1, 2, 0],
+                 [0, 0, 2, 0],
+                 [0, 0, 2, 1],
+                 [1, 0, 2, 1],
+                 [2, 1, 2, 0],
+                 [2, 0, 2, 0],
+                 [0, 1, 2, 0],
+                 [2, 1, 2, 1],
+                 [1, 1, 2, 1],
+                 [1, 2, 2, 0],
+                 [0, 1, 2, 1]])
+
+y = np.array([0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0])
 
 data_test = np.array([[2, 2, 2, 0],
                       [1, 0, 2, 1],
@@ -28,7 +30,7 @@ data_test = np.array([[2, 2, 2, 0],
 dt = decision_tree.DecisionTree()
 
 # ---Train Decision Tree--- #
-model = dt.train(data)
+model = dt.train(X, y)
 
 # ---Create Decision Tree From Previously Trained Model--- #
 dt2 = decision_tree.DecisionTree(model)

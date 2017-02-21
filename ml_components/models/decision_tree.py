@@ -20,14 +20,14 @@ class DecisionTree(object):
             self.depth = model['depth']
             self.max_breadth = model['max_breadth']
 
-    def train(self, data):
+    def train(self, X, y):
         self.start_node = Node('attribute')
-        self.start_node.split(data)
+        self.start_node.split(X, y)
 
         get_depth = lambda alist: isinstance(alist, list) and max(map(get_depth, alist)) + 1
 
         structure = self.start_node.get_model()
-        class_count = data.shape[1] - 1
+        class_count = X.shape[1]
         depth = get_depth(structure)
         max_breadth = (depth - 1) ** class_count
 
@@ -50,38 +50,40 @@ class Node(object):
         self.child_nodes = []
         self.output = None
 
-    def _get_entropy(self, data):
+    def _get_entropy(self, y):
         """Get the entropy of an attribute in the node."""
-        class_counts = np.bincount(data[:, -1])
-        pv = class_counts[np.nonzero(class_counts)] / len(data[:, -1])
+        class_counts = np.bincount(y)
+        pv = class_counts[np.nonzero(class_counts)] / len(y)
         entropy = np.sum(-pv * np.log2(pv))
 
         return entropy
 
-    def _get_information_gain(self, data, attribute):
+    def _get_information_gain(self, X, y, attribute):
         """Get the information gain for a given split on an attribute."""
-        values = list(set(data[:, attribute]))  # Get unique list of attribute values.
+        values = list(set(X[:, attribute]))  # Get unique list of attribute values.
         new_sets = []
 
         for value in values:
-            mask = data[:, attribute] == value
-            new_data = data[mask, :]
+            mask = X[:, attribute] == value
+            new_X = X[mask, :]
+            new_y = y[mask]
 
-            new_sets.append(new_data)
+            new_sets.append((new_X, new_y))
 
-        entropy_current = self._get_entropy(data)
-        entropy_new = sum([(s.shape[0] / data.shape[0]) * self._get_entropy(s) for s in
-                           new_sets])  # Get the sum of the entropy of each data split.
+        entropy_current = self._get_entropy(y)
+
+        # Get the sum of the entropy of each data split.
+        entropy_new = sum([(s[1].shape[0] / X.shape[0]) * self._get_entropy(s[1]) for s in new_sets])
 
         return entropy_current - entropy_new
 
-    def _get_best_attribute(self, data):
+    def _get_best_attribute(self, X, y):
         """Get the attribute with the most information gain."""
-        attributes = data.shape[1] - 1 if len(data.shape) == 2 else data.shape[0] - 1
+        attributes = X.shape[1] if len(X.shape) == 2 else X.shape[0]
         gains = []
 
         for attribute in range(attributes):
-            gains.append(self._get_information_gain(data, attribute))
+            gains.append(self._get_information_gain(X, y, attribute))
 
         best, _ = max(enumerate(gains), key=operator.itemgetter(1))
 
@@ -93,20 +95,21 @@ class Node(object):
 
         return np.all(data[:, -1] == comparison_class)
 
-    def split(self, data, i=0):
-        self.attribute = self._get_best_attribute(data)
-        values = list(set(data[:, self.attribute]))
+    def split(self, X, y, i=0):
+        self.attribute = self._get_best_attribute(X, y)
+        values = list(set(X[:, self.attribute]))
 
         for value in values:
-            mask = data[:, self.attribute] == value
-            new_data = data[mask, :]
+            mask = X[:, self.attribute] == value
+            new_X = X[mask, :]
+            new_y = y[mask]
 
-            if self._get_entropy(new_data) == 0:
+            if self._get_entropy(new_y) == 0:
                 new_node = Node('leaf')
-                new_node.output = new_data[0][-1]
+                new_node.output = new_y[0]
             else:
                 new_node = Node('attribute')
-                new_node.split(new_data, i=i + 1)
+                new_node.split(new_X, new_y, i=i + 1)
 
             self.child_nodes.append(new_node)
 
