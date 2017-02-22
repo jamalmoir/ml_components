@@ -1,7 +1,8 @@
-import ml_components
 import operator
 
 import numpy as np
+
+from ml_components.models.utils.data_tools import reduce_dimensions
 
 
 class DecisionTree(object):
@@ -13,16 +14,22 @@ class DecisionTree(object):
     def __init__(self, model=None):
         if model is None:
             self.start_node = None
+            self.num_dims = 3
+            self.kmeans_models = []
         else:
             self.model = model
             self.start_node = Node('attribute')
             self.start_node.build_from_model(model['structure'])
             self.depth = model['depth']
             self.max_breadth = model['max_breadth']
+            self.num_dims = model['num_dims']
+            self.kmeans_models = model['kmeans_models']
 
-    def train(self, X, y):
+    def train(self, X, y, max_iter=100):
+        X, self.kmeans_models = reduce_dimensions(X=X, num_dimensions=self.num_dims)
+
         self.start_node = Node('attribute')
-        self.start_node.split(X, y)
+        self.start_node.split(X=X, y=y, max_iter=max_iter)
 
         get_depth = lambda alist: isinstance(alist, list) and max(map(get_depth, alist)) + 1
 
@@ -31,12 +38,19 @@ class DecisionTree(object):
         self.depth = get_depth(structure)
         self.max_breadth = (self.depth - 1) ** class_count
 
-        self.model = {'depth': self.depth, 'max_breadth': self.max_breadth, 'structure': structure}
+        self.model = {
+            'depth': self.depth,
+            'max_breadth': self.max_breadth,
+            'structure': structure,
+            'num_dims': self.num_dims,
+            'kmeans_models': self.kmeans_models,
+        }
 
         return self.model
 
     def predict(self, data):
-        prediction = np.apply_along_axis(self.start_node.predict, axis=1, arr=data)
+        data = reduce_dimensions(X=data, models=self.kmeans_models)
+        prediction = np.apply_along_axis(self.start_node.predict, axis=1, arr=data, num_dims=self.num_dims)
 
         return prediction
 
@@ -95,7 +109,7 @@ class Node(object):
 
         return np.all(data[:, -1] == comparison_class)
 
-    def split(self, X, y, i=0):
+    def split(self, X, y, max_iter, i=0):
         self.attribute = self._get_best_attribute(X, y)
         values = list(set(X[:, self.attribute]))
 
@@ -104,26 +118,28 @@ class Node(object):
             new_X = X[mask, :]
             new_y = y[mask]
 
-            if self._get_entropy(new_y) == 0:
+            if self._get_entropy(new_y) == 0 or i >= max_iter:
                 new_node = Node('leaf')
                 new_node.output = new_y[0]
             else:
                 new_node = Node('attribute')
-                new_node.split(new_X, new_y, i=i + 1)
+                new_node.split(X=new_X, y=new_y, max_iter=max_iter, i=i + 1)
 
             self.child_nodes.append(new_node)
 
-    def predict(self, data):
+    def predict(self, data, num_dims):
         if self.node_type == 'leaf':
             return self.output
         else:
+            print(self.attribute)
             attribute_value = data[self.attribute]
             try:
-                return self.child_nodes[attribute_value].predict(data)
+                return self.child_nodes[attribute_value].predict(data=data, num_dims=num_dims)
             except IndexError:
-                print("Unexpected value ({}) given for attribute {}, terminating...".format(attribute_value,
-                                                                                            self.attribute))
-                exit()
+                print("Warning: Unexpected value ({}) given for attribute {}, terminating...".format(attribute_value,
+                                                                                                     self.attribute))
+                random_branch = np.random.randint(0, len(self.child_nodes))
+                return self.child_nodes[random_branch].predict(data=data, num_dims=num_dims)
 
     def get_model(self):
         if self.node_type == 'leaf':
