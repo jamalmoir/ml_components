@@ -2,10 +2,13 @@ import numpy as np
 
 
 class KMeans(object):
-    def __init__(self):
-        self.centroids = None
-        self.prev_centroids = None
-        self.labels = None
+    def __init__(self, model=None):
+        if model is None:
+            self.centroids = None
+            self.prev_centroids = None
+            self.labels = None
+        else:
+            self.centroids = model['centroids']
 
     def _random_centroid(self, num_features, maxi, mini):
         """Generates a random centroid for a number of features."""
@@ -64,6 +67,9 @@ class KMeans(object):
         return no_cent_change or max_iter_reached
 
     def train(self, X, k, max_iter=500):
+        if X.ndim <= 1:
+            X = np.atleast_2d(X).T
+
         self.centroids = [self._random_centroid(num_features=X.shape[1], maxi=X.max(), mini=X.min())] * k
 
         i = 0
@@ -75,4 +81,24 @@ class KMeans(object):
 
             i += 1
 
-        return X, self.labels
+        return self.get_model(), self.labels
+
+    def get_model(self):
+        model = {
+            'k': len(self.centroids),
+            'centroids': self.centroids
+        }
+
+        return model
+
+    def get_labels(self, X):
+        if self.centroids is None:
+            raise RuntimeError('No model present.')
+
+        if X.ndim <= 1:
+            X = np.atleast_2d(X).T
+
+        labels = np.apply_along_axis(arr=X, func1d=self._get_closest_centroid, axis=1)
+
+        return labels
+
