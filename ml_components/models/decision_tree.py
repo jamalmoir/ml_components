@@ -131,13 +131,12 @@ class Node(object):
         if self.node_type == 'leaf':
             return self.output
         else:
-            print(self.attribute)
             attribute_value = data[self.attribute]
             try:
                 return self.child_nodes[attribute_value].predict(data=data, num_dims=num_dims)
             except IndexError:
-                print("Warning: Unexpected value ({}) given for attribute {}, terminating...".format(attribute_value,
-                                                                                                     self.attribute))
+                #print("Warning: Unexpected value ({}) given for attribute {}, terminating...".format(attribute_value,
+                #                                                                                     self.attribute))
                 random_branch = np.random.randint(0, len(self.child_nodes))
                 return self.child_nodes[random_branch].predict(data=data, num_dims=num_dims)
 
