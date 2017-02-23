@@ -27,6 +27,7 @@ class DecisionTree(object):
 
     def train(self, X, y, max_iter=100):
         X, self.kmeans_models = reduce_dimensions(X=X, num_dimensions=self.num_dims)
+        X = X.astype(float)
 
         self.start_node = Node('attribute')
         self.start_node.split(X=X, y=y, max_iter=max_iter)
