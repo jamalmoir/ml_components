@@ -50,8 +50,21 @@ class NeuralNetwork(object):
             self.activation_func = model['activation_func']
             self.input_layer_size = model['input_layer_size']
             self.hidden_layer_size = model['hidden_layer_size']
-            self.output_layer_size = model['label_count']
+            self.output_layer_size = model['output_layer_size']
             self.label_map = model['label_map']
+
+    @property
+    def model(self):
+        """Return a model representing the Network."""
+        return {
+            'theta1': self.theta1,
+            'theta2': self.theta2,
+            'activation_func': self.activation_func,
+            'input_layer_size': self.input_layer_size,
+            'hidden_layer_size': self.hidden_layer_size,
+            'output_layer_size': self.output_layer_size,
+            'label_map': self.label_map,
+        }
 
     def _init_epsilon(self):
         """Initialise the value of epsilon.
@@ -151,18 +164,6 @@ class NeuralNetwork(object):
         self.prev_theta1_delta = theta1_delta
         self.prev_theta2_delta = theta2_delta
 
-    def get_model(self):
-        """Return a model representing the Network."""
-        return {
-            'theta1': self.theta1,
-            'theta2': self.theta2,
-            'activation_func': self.activation_func,
-            'input_layer_size': self.input_layer_size,
-            'hidden_layer_size': self.hidden_layer_size,
-            'label_count': self.output_layer_size,
-            'label_map': self.label_map,
-        }
-
     def train(self, X, y, alpha=0.5, max_epochs=5000, lam=0.01, adaptive=0.001, dec_amount=0.00001,
               print_cost=False):
         """Train the Network.
@@ -208,7 +209,7 @@ class NeuralNetwork(object):
             if print_cost:
                 print(self.costs[i])
 
-        return self.costs[-1], self.costs, self.get_model()
+        return self.costs[-1], self.costs, self.model
 
     def predict(self, X, use_label_map=True):
         """Make a prediction with a trained network.
@@ -232,4 +233,4 @@ class NeuralNetwork(object):
             mapped = [self.label_map[pred] for pred in prediction]
             prediction = mapped
       
-        return prediction
+        return np.asarray(prediction)
