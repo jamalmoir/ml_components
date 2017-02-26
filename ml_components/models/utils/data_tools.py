@@ -33,6 +33,8 @@ def reduce_dimensions(X, num_dimensions=None, models=None):
         The features to be reduced.
     num_dimensions: int
         The number of dimensions to reduce to.
+    models: list
+        The K-Means models for each feature.
     """
     new_X = None
 
@@ -76,6 +78,8 @@ def reduce_dimension(X, num_dimensions=None, model=None):
         The 1D feature to be reduced.
     num_dimensions: int
         The number of dimensions to reduce to.
+    model : dict
+        The K-Means model for the feature.
     """
 
     if num_dimensions is not None:
