@@ -6,7 +6,8 @@ This library goes alongside my Machine Learning demonstration graphical applicat
 
 **IMPLEMENTED**
 - Forward Feeding Backpropagation Artificial Neural Network
-- Decision Tree trained via the ID3 algorithm
+- Decision Tree trained via the ID3 algorithm, in combination with K-Means clustering to handle continuous data.
+- K-Means Clustering
 
 **TODO**
 - K-Nearest-Neighbours 
@@ -21,7 +22,8 @@ This library goes alongside my Machine Learning demonstration graphical applicat
 - ~~Add hyperbolic tangent as a activation function~~
 - ~~Develop Decision Tree trained with the ID3 algorithm~~
 - ~~Add support for saving Decision Trees to and loading them from pre-trained models~~
-- Add support for continuous data to the Decision Tree
+- ~~Develop K-Means clustering model~~
+- ~~Add support for continuous data to the Decision Tree~~
 - Develop K-Nearest-Neighbours algorithm
 - Develop Logicsitc Regression algorithm
 - Develop Linear Regression algorithm
