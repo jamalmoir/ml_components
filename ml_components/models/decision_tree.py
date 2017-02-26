@@ -2,28 +2,39 @@ import operator
 
 import numpy as np
 
+from ml_components.models.model import Classifier
 from ml_components.models.utils.data_tools import reduce_dimensions
 
 
-class DecisionTree(object):
+class DecisionTree(Classifier):
     """Implements a decision tree.
 
     Implements a decision tree utilising the ID3 algorithm for training.
     """
-
     def __init__(self, model=None):
         if model is None:
             self.start_node = None
             self.num_dims = 3
             self.kmeans_models = []
         else:
-            self.model = model
             self.start_node = Node('attribute')
             self.start_node.build_from_model(model['structure'])
             self.depth = model['depth']
             self.max_breadth = model['max_breadth']
             self.num_dims = model['num_dims']
             self.kmeans_models = model['kmeans_models']
+
+    @property
+    def model(self):
+        model = {
+            'depth': self.depth,
+            'max_breadth': self.max_breadth,
+            'structure': self.start_node.get_model(),
+            'num_dims': self.num_dims,
+            'kmeans_models': self.kmeans_models,
+        }
+
+        return model
 
     def train(self, X, y, max_iter=100):
         X, self.kmeans_models = reduce_dimensions(X=X, num_dimensions=self.num_dims)
@@ -33,18 +44,9 @@ class DecisionTree(object):
 
         get_depth = lambda alist: isinstance(alist, list) and max(map(get_depth, alist)) + 1
 
-        structure = self.start_node.get_model()
         class_count = X.shape[1]
-        self.depth = get_depth(structure)
+        self.depth = get_depth(self.start_node.get_model())
         self.max_breadth = (self.depth - 1) ** class_count
-
-        self.model = {
-            'depth': self.depth,
-            'max_breadth': self.max_breadth,
-            'structure': structure,
-            'num_dims': self.num_dims,
-            'kmeans_models': self.kmeans_models,
-        }
 
         return self.model
 

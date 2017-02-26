@@ -1,7 +1,9 @@
 import numpy as np
 
+from ml_components.models.model import Clusterer
 
-class KMeans(object):
+
+class KMeans(Clusterer):
     def __init__(self, model=None):
         if model is None:
             self.centroids = None
@@ -9,6 +11,15 @@ class KMeans(object):
             self.labels = None
         else:
             self.centroids = model['centroids']
+
+    @property
+    def model(self):
+        model = {
+            'k': len(self.centroids),
+            'centroids': self.centroids
+        }
+
+        return model
 
     def _random_centroid(self, num_features, maxi, mini):
         """Generates a random centroid for a number of features."""
@@ -81,15 +92,7 @@ class KMeans(object):
 
             i += 1
 
-        return self.get_model(), self.labels
-
-    def get_model(self):
-        model = {
-            'k': len(self.centroids),
-            'centroids': self.centroids
-        }
-
-        return model
+        return self.model, self.labels
 
     def get_labels(self, X):
         if self.centroids is None:

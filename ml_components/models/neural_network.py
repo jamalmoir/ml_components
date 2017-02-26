@@ -4,9 +4,10 @@ import pandas as pd
 
 import ml_components.models.utils.activation_functions as af
 import ml_components.models.utils.data_tools as data_tools
+from ml_components.models.model import Classifier
 
 
-class NeuralNetwork(object):
+class NeuralNetwork(Classifier):
     """Implements a neural network.
 
     A Forward feeding, backpropagation Artificial Neural Network.
