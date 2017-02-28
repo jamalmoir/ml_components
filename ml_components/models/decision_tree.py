@@ -11,7 +11,7 @@ class DecisionTree(Classifier):
 
     Implements a decision tree utilising the ID3 algorithm for training.
     """
-    def __init__(self, num_dims=3, model=None):
+    def __init__(self, model=None, num_dims=3):
         if model is None:
             self._start_node = None
             self._num_dims = num_dims
