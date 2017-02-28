@@ -99,7 +99,8 @@ class Node(object):
         y : np.ndarray
             A vector of expected outputs.
         """
-        class_counts = np.bincount(y)
+        mask = ~np.isnan(y)
+        class_counts = np.bincount(y[mask])
         pv = class_counts[np.nonzero(class_counts)] / len(y)
         entropy = np.sum(-pv * np.log2(pv))
 
