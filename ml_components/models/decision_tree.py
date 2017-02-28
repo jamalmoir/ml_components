@@ -99,8 +99,7 @@ class Node(object):
         y : np.ndarray
             A vector of expected outputs.
         """
-        mask = ~np.isnan(y)
-        class_counts = np.bincount(y[mask])
+        class_counts = np.bincount(y)
         pv = class_counts[np.nonzero(class_counts)] / len(y)
         entropy = np.sum(-pv * np.log2(pv))
 
@@ -223,10 +222,10 @@ class Node(object):
         else:
             attribute_value = X[self._attribute]
             try:
-                return self._child_nodes[attribute_value].predict(data=X, num_dims=num_dims)
+                return self._child_nodes[attribute_value].predict(X=X, num_dims=num_dims)
             except IndexError:
                 random_branch = np.random.randint(0, len(self._child_nodes))
-                return self._child_nodes[random_branch].predict(data=X, num_dims=num_dims)
+                return self._child_nodes[random_branch].predict(X=X, num_dims=num_dims)
 
     def get_model(self):
         """Return the node and child node's model."""
